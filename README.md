@@ -2,7 +2,8 @@
 
 A high-performance, visually striking landing page dedicated to **Hwa Ryun**, the enigmatic strategist from the *Tower of God* series. This project showcases a modern "Dark Crimson" UI/UX design with smooth animations and a responsive layout.
 
-![Project Preview](image_f1f251.jpg)
+![Project Preview](<img width="1878" height="974" alt="image" src="https://github.com/user-attachments/assets/971d9ea8-d19c-422e-ac53-5b397d2fd8d0" />
+)
 
 ## ✨ Features
 * **Custom Crimson Theme:** A curated color palette designed specifically to match Hwa Ryun's aesthetic.
