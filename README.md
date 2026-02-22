@@ -2,7 +2,7 @@
 
 A high-performance, visually striking landing page and **interactive AI experience** dedicated to **Hwa Ryun**, the enigmatic strategist from the *Tower of God* series. This project showcases a modern "Dark Crimson" UI/UX design, smooth animations, a responsive layout, and a fully integrated AI chatbot that roleplays as the Red Witch herself.
 
-![Project Preview]()
+![Project Preview](ss.png)
 
 ## ✨ Features
 * **🤖 Intelligent AI "Guide" Chatbot:** An integrated AI assistant powered by GPT-4o (via GitHub Models). She speaks in character, parses Markdown for rich text formatting, and features dynamic "Online/Offline" status handling if the Tower's connection (API) is lost.
