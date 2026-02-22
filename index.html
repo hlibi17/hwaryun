@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hwa Ryun</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        crimson: {
+                            DEFAULT: '#DC143C',
+                            light: '#FF4D6D',
+                            dark: '#A10E2B',
+                            darker: '#6B0A1D'
+                        }
+                    },
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif']
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                        'slide-left': 'slideLeft 0.8s ease-out forwards',
+                        'slide-right': 'slideRight 0.8s ease-out forwards',
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(50px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideLeft: {
+                            '0%': { opacity: '0', transform: 'translateX(50px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' }
+                        },
+                        slideRight: {
+                            '0%': { opacity: '0', transform: 'translateX(-50px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px #DC143C, 0 0 10px #DC143C' },
+                            '100%': { boxShadow: '0 0 20px #DC143C, 0 0 30px #DC143C, 0 0 40px #DC143C' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .bg-gradient-crimson {
+            background: linear-gradient(135deg, #1a0a0e 0%, #2d0f17 50%, #1a0a0e 100%);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #DC143C, #FF4D6D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(220, 20, 60, 0.3);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #DC143C;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #DC143C;
+            border-radius: 50%;
+            animation: particleFloat 15s infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .music-btn {
+            transition: all 0.3s ease;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .music-btn.playing {
+            animation: pulse 1s infinite;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a0a0e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #DC143C;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF4D6D;
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Chatbot Styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+        }
+
+        .chat-toggle-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #DC143C, #A10E2B);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(220, 20, 60, 0.5);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-toggle-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(220, 20, 60, 0.7);
+        }
+
+        .chat-toggle-btn.active {
+            transform: rotate(90deg);
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 380px;
+            max-width: calc(100vw - 48px);
+            height: 500px;
+            max-height: calc(100vh - 150px);
+            background: linear-gradient(145deg, #1a0a0e, #2d0f17);
+            border-radius: 20px;
+            border: 1px solid rgba(220, 20, 60, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.3s ease;
+        }
+
+        .chat-window.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #DC143C, #A10E2B);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            object-fit: cover;
+        }
+
+        .chat-header-info h4 {
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .chat-header-info p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* Add this new class */
+        .offline-dot {
+            width: 8px;
+            height: 8px;
+            background: #ffdae2; /* Crimson red */
+            border-radius: 50%;
+            /* No animation when offline */
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(220, 20, 60, 0.5);
+            border-radius: 3px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+            animation: messageSlide 0.3s ease;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.bot {
+            background: rgba(220, 20, 60, 0.2);
+            border: 1px solid rgba(220, 20, 60, 0.3);
+            color: #f0f0f0;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #DC143C, #A10E2B);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: rgba(220, 20, 60, 0.2);
+            border: 1px solid rgba(220, 20, 60, 0.3);
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+            max-width: 70px;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #DC143C;
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(1) { animation-delay: 0s; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        .chat-input-area {
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(220, 20, 60, 0.2);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(220, 20, 60, 0.3);
+            border-radius: 25px;
+            padding: 12px 18px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .chat-input:focus {
+            border-color: #DC143C;
+            box-shadow: 0 0 10px rgba(220, 20, 60, 0.3);
+        }
+
+        .chat-send-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #DC143C, #A10E2B);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .chat-send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(220, 20, 60, 0.5);
+        }
+
+        .chat-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 0 16px 12px;
+        }
+
+        .quick-reply-btn {
+            background: rgba(220, 20, 60, 0.15);
+            border: 1px solid rgba(220, 20, 60, 0.4);
+            color: #FF4D6D;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-reply-btn:hover {
+            background: rgba(220, 20, 60, 0.3);
+            border-color: #DC143C;
+        }
+
+        /* Notification badge */
+        .chat-notification {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            background: #4ade80;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @media (max-width: 480px) {
+            .chat-window {
+                width: calc(100vw - 32px);
+                height: calc(100vh - 120px);
+                bottom: 70px;
+                right: -8px;
+            }
+
+            .chatbot-container {
+                bottom: 16px;
+                right: 16px;
+            }
+        }
+
+        /* Fix for Markdown spacing inside chat bubbles */
+        .message.bot.prose :first-child { margin-top: 0; }
+        .message.bot.prose :last-child { margin-bottom: 0; }
+        .message.bot.prose ul, .message.bot.prose ol { padding-left: 1.25rem; }
+        .message.bot.prose hr { margin: 1rem 0; opacity: 0.2; }
+    </style>
+</head>
+<body class="bg-gradient-crimson min-h-screen text-white font-poppins">
+
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-crimson/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-2xl font-bold text-gradient">
+                        <svg class="w-8 h-8 inline-block mr-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#DC143C"/>
+                        </svg>
+                        <span class="text-crimson">Waifu</span>Hub
+                    </a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-center space-x-8">
+                        <a href="#home" class="nav-link text-gray-300 hover:text-crimson transition-colors duration-300">Home</a>
+                        <a href="#about" class="nav-link text-gray-300 hover:text-crimson transition-colors duration-300">About</a>
+                        <a href="#gallery" class="nav-link text-gray-300 hover:text-crimson transition-colors duration-300">Gallery</a>
+                    </div>
+                </div>
+
+                <!-- Music Control -->
+                <div class="flex items-center space-x-4">
+                    <button id="musicBtn" class="music-btn p-2 rounded-full bg-crimson/20 hover:bg-crimson/40 border border-crimson/50">
+                        <svg id="musicIcon" class="w-6 h-6 text-crimson" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                        </svg>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobileMenuBtn" class="md:hidden p-2 rounded-md text-gray-300 hover:text-crimson">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-black/95 border-t border-crimson/30">
+            <div class="px-4 py-4 space-y-3">
+                <a href="#home" class="block text-gray-300 hover:text-crimson transition-colors duration-300 py-2">Home</a>
+                <a href="#about" class="block text-gray-300 hover:text-crimson transition-colors duration-300 py-2">About</a>
+                <a href="#gallery" class="block text-gray-300 hover:text-crimson transition-colors duration-300 py-2">Gallery</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/80"></div>
+
+        <!-- Animated Background Circles -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-crimson/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-crimson-light/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 1s;"></div>
+
+        <div class="relative z-10 text-center px-4 max-w-6xl mx-auto">
+            <div class="animate-fade-in">
+                <!-- Character Image -->
+                <div class="mb-8 relative inline-block">
+                    <div class="w-64 h-64 md:w-80 md:h-80 mx-auto rounded-full overflow-hidden border-4 border-crimson animate-glow">
+                        <img src="image-hero.jpg"
+                             alt="Anime Character"
+                             class="w-full h-full object-cover animate-float"
+                             onerror="this.src='https://via.placeholder.com/400x400/DC143C/FFFFFF?text=Character'">
+                    </div>
+                    <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-crimson px-6 py-2 rounded-full">
+                        <span class="text-white font-semibold">My Favorite</span>
+                    </div>
+                </div>
+
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
+                    <span class="text-gradient">The Red-Haired Guide</span>
+                    <br>
+                    <span class="text-white">Hwa Ryun</span>
+                </h1>
+
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto animate-slide-up" style="animation-delay: 0.3s;">
+                    "As promised, all that you seek, all that we desire, is prepared up there. On top of the Tower."
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up" style="animation-delay: 0.5s;">
+                    <a href="#about" class="px-8 py-4 bg-crimson hover:bg-crimson-dark rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-crimson/50">
+                        Discover More
+                    </a>
+                    <a href="#gallery" class="px-8 py-4 border-2 border-crimson text-crimson hover:bg-crimson hover:text-white rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105">
+                        View Gallery
+                    </a>
+                </div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce-slow">
+                <svg class="w-8 h-8 text-crimson" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-4 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 animate-on-scroll">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="text-gradient">Character</span> Profile
+                </h2>
+                <div class="w-24 h-1 bg-crimson mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Character Image -->
+                <div class="animate-on-scroll">
+                    <div class="relative group">
+                        <div class="absolute -inset-4 bg-gradient-to-r from-crimson to-crimson-light rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+                        <img src="about.png"
+                             alt="Character Full"
+                             class="relative rounded-2xl w-full shadow-2xl transform group-hover:scale-[1.02] transition-transform duration-500"
+                             onerror="this.src='https://via.placeholder.com/600x800/DC143C/FFFFFF?text=Character'">
+                    </div>
+                </div>
+
+                <!-- Character Info -->
+                <div class="space-y-6">
+                    <div class="animate-on-scroll">
+                        <h3 class="text-3xl font-bold text-crimson mb-4">About the Character</h3>
+                        <p class="text-gray-300 leading-relaxed text-lg">
+                            A master strategist who plays 4D chess with destiny, Hwa Ryun is the Tower’s most enigmatic Guide. 
+                            Known as the 'Red-Haired Witch,' she moves through the shadows of the Tower not with raw power, 
+                            but with the chilling ability to see the future's many paths. Unapologetically blunt and fiercely loyal 
+                            to her own hidden convictions, she proves that the person who truly understands the 'Path' is far more dangerous 
+                            than the one wielding the strongest weapon.
+                        </p>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-2 gap-4 animate-on-scroll">
+                        <div class="card-hover bg-black/40 p-6 rounded-xl border border-crimson/30 transition-all duration-300">
+                            <div class="text-crimson text-3xl font-bold">Active</div>
+                            <div class="text-gray-400">Climb Status</div>
+                        </div>
+                        <div class="card-hover bg-black/40 p-6 rounded-xl border border-crimson/30 transition-all duration-300">
+                            <div class="text-crimson text-3xl font-bold">Guide (Red Witch)</div>
+                            <div class="text-gray-400">Position</div>
+                        </div>
+                        <div class="card-hover bg-black/40 p-6 rounded-xl border border-crimson/30 transition-all duration-300">
+                            <div class="text-crimson text-3xl font-bold">#1</div>
+                            <div class="text-gray-400">Fan Ranking</div>
+                        </div>
+                        <div class="card-hover bg-black/40 p-6 rounded-xl border border-crimson/30 transition-all duration-300">
+                            <div class="text-crimson text-3xl font-bold">Unrivaled</div>
+                            <div class="text-gray-400">Future Sight</div>
+                        </div>
+                    </div>
+
+                    <!-- Traits -->
+                    <div class="animate-on-scroll">
+                        <h4 class="text-xl font-semibold mb-3 text-white">Key Traits</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-4 py-2 bg-crimson/20 border border-crimson/50 rounded-full text-crimson-light hover:bg-crimson/30 transition-colors cursor-default">Enigmatic</span>
+                            <span class="px-4 py-2 bg-crimson/20 border border-crimson/50 rounded-full text-crimson-light hover:bg-crimson/30 transition-colors cursor-default">Pathfinder</span>
+                            <span class="px-4 py-2 bg-crimson/20 border border-crimson/50 rounded-full text-crimson-light hover:bg-crimson/30 transition-colors cursor-default">Loyal</span>
+                            <span class="px-4 py-2 bg-crimson/20 border border-crimson/50 rounded-full text-crimson-light hover:bg-crimson/30 transition-colors cursor-default">Prophetic</span>
+                            <span class="px-4 py-2 bg-crimson/20 border border-crimson/50 rounded-full text-crimson-light hover:bg-crimson/30 transition-colors cursor-default">Pragmatic</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 px-4 bg-black/30">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 animate-on-scroll">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="text-gradient">Image</span> Gallery
+                </h2>
+                <div class="w-24 h-1 bg-crimson mx-auto rounded-full"></div>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">A collection of memorable moments and stunning artwork</p>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Gallery Item 1 -->
+                <div class="gallery-item animate-on-scroll group relative overflow-hidden rounded-2xl cursor-pointer" onclick="openLightbox(this)">
+                    <img src="gallery1.jpg"
+                         alt="Gallery 1"
+                         class="w-full h-64 object-cover transition-transform duration-500"
+                         onerror="this.src='https://via.placeholder.com/600x400/DC143C/FFFFFF?text=Image+1'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <h4 class="text-white font-semibold">Floor Test</h4>
+                            <p class="text-gray-300 text-sm">Click to enlarge</p>
+                        </div>
+                    </div>
+                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 2 -->
+                <div class="gallery-item animate-on-scroll group relative overflow-hidden rounded-2xl cursor-pointer" onclick="openLightbox(this)">
+                    <img src="gallery2.jpg"
+                         alt="Gallery 2"
+                         class="w-full h-64 object-cover transition-transform duration-500"
+                         onerror="this.src='https://via.placeholder.com/600x400/DC143C/FFFFFF?text=Image+2'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <h4 class="text-white font-semibold">Resignation</h4>
+                            <p class="text-gray-300 text-sm">Click to enlarge</p>
+                        </div>
+                    </div>
+                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 3 -->
+                <div class="gallery-item animate-on-scroll group relative overflow-hidden rounded-2xl cursor-pointer" onclick="openLightbox(this)">
+                    <img src="gallery3.png"
+                         alt="Gallery 3"
+                         class="w-full h-64 object-cover transition-transform duration-500"
+                         onerror="this.src='https://via.placeholder.com/600x400/DC143C/FFFFFF?text=Image+3'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <h4 class="text-white font-semibold">Yuto Outfit</h4>
+                            <p class="text-gray-300 text-sm">Click to enlarge</p>
+                        </div>
+                    </div>
+                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 4 -->
+                <div class="gallery-item animate-on-scroll group relative overflow-hidden rounded-2xl cursor-pointer" onclick="openLightbox(this)">
+                    <img src="gallery4.png"
+                         alt="Gallery 4"
+                         class="w-full h-64 object-cover transition-transform duration-500"
+                         onerror="this.src='https://via.placeholder.com/600x400/DC143C/FFFFFF?text=Image+4'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <h4 class="text-white font-semibold">Emotional Scene</h4>
+                            <p class="text-gray-300 text-sm">Click to enlarge</p>
+                        </div>
+                    </div>
+                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 5 -->
+                <div class="gallery-item animate-on-scroll group relative overflow-hidden rounded-2xl cursor-pointer" onclick="openLightbox(this)">
+                    <img src="gallery5.jpg"
+                         alt="Gallery 5"
+                         class="w-full h-64 object-cover transition-transform duration-500"
+                         onerror="this.src='https://via.placeholder.com/600x400/DC143C/FFFFFF?text=Image+5'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <h4 class="text-white font-semibold">After Ambush</h4>
+                            <p class="text-gray-300 text-sm">Click to enlarge</p>
+                        </div>
+                    </div>
+                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 6 -->
+                <div class="gallery-item animate-on-scroll group relative overflow-hidden rounded-2xl cursor-pointer" onclick="openLightbox(this)">
+                    <img src="gallery6.png"
+                         alt="Gallery 6"
+                         class="w-full h-64 object-cover transition-transform duration-500"
+                         onerror="this.src='https://via.placeholder.com/600x400/DC143C/FFFFFF?text=Image+6'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <h4 class="text-white font-semibold">Bottom Floor</h4>
+                            <p class="text-gray-300 text-sm">Click to enlarge</p>
+                        </div>
+                    </div>
+                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-4 border-t border-crimson/30">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="mb-6">
+                <span class="text-2xl font-bold text-gradient">WaifuHub</span>
+            </div>
+            <p class="text-gray-400 mb-6">Made with ❤️ for me, everywhere i go</p>
+            <!-- <div class="flex justify-center space-x-6">
+                <a href="#" class="text-gray-400 hover:text-crimson transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-crimson transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-crimson transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                </a>
+            </div> -->
+            <p class="text-gray-500 text-sm mt-8">© 2026 WaifuHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 z-50 bg-black/95 hidden items-center justify-center p-4" onclick="closeLightbox()">
+        <button class="absolute top-4 right-4 text-white hover:text-crimson transition-colors z-10">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+        <img id="lightboxImg" src="" alt="Enlarged" class="max-w-full max-h-[90vh] object-contain rounded-lg" onclick="event.stopPropagation()">
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <!-- Chat Window -->
+        <div id="chatWindow" class="chat-window">
+            <!-- Header -->
+            <div class="chat-header">
+                <img src="image-hero.jpg"
+                     alt="Bot Avatar"
+                     class="chat-avatar"
+                     onerror="this.src='https://via.placeholder.com/100x100/DC143C/FFFFFF?text=Bot'">
+                <div class="chat-header-info">
+                    <h4>Hwa Ryun</h4>
+                    <p><span id="statusDot" class="online-dot"></span> <span id="statusText">Online</span></p>
+                </div>
+            </div>
+
+            <!-- Messages Container -->
+            <div id="chatMessages" class="chat-messages">
+                <div class="message bot prose prose-sm prose-invert border-l-4 border-crimson pl-4">
+                    The paths are shifting, my God. Ask me what you seek, and I shall show you the way forward.
+                </div>
+            </div>
+
+            <!-- Quick Replies -->
+            <div class="quick-replies">
+                <button class="quick-reply-btn" onclick="sendQuickReply('Who are you, Red Witch?')">About You</button>
+                <button class="quick-reply-btn" onclick="sendQuickReply('What is your role as a Guide?')">Your Role</button>
+                <button class="quick-reply-btn" onclick="sendQuickReply('How is our path through the Tower looking?')">Climb Status</button>
+            </div>
+
+            <!-- Input Area -->
+            <div class="chat-input-area">
+                <input type="text"
+                       id="chatInput"
+                       class="chat-input"
+                       placeholder="Type your message..."
+                       onkeypress="handleKeyPress(event)">
+                <button id="sendBtn" class="chat-send-btn" onclick="sendMessage()">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <button id="chatToggle" class="chat-toggle-btn" onclick="toggleChat()">
+            <span id="chatNotification" class="chat-notification" style="display: none;">1</span>
+            <svg id="chatIcon" class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Background Music (using a silent audio as placeholder - replace with actual audio URL) -->
+    <audio id="bgMusic" loop>
+        <source src="Hwa Ryun.m4a" type="audio/mp4">
+    </audio>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Music Control
+        const musicBtn = document.getElementById('musicBtn');
+        const bgMusic = document.getElementById('bgMusic');
+        const musicIcon = document.getElementById('musicIcon');
+        let isPlaying = false;
+
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.classList.remove('playing');
+                musicIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>';
+            } else {
+                bgMusic.play();
+                musicBtn.classList.add('playing');
+                musicIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M6 18l.001-12a1 1 0 011.499-.866l8 5a1 1 0 010 1.732l-8 5A1 1 0 016 18z"/>';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // Lightbox Functions
+        function openLightbox(element) {
+            const img = element.querySelector('img');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+
+            lightboxImg.src = img.src;
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.add('hidden');
+            lightbox.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close lightbox with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+
+        // Create Floating Particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        createParticles();
+
+        // Scroll Animation Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Navbar Background on Scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-black/95');
+                nav.classList.remove('bg-black/80');
+            } else {
+                nav.classList.remove('bg-black/95');
+                nav.classList.add('bg-black/80');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+<script>
+// ============================================================================
+// CHATBOT FUNCTIONALITY
+// ============================================================================
+
+const chatWindow = document.getElementById('chatWindow');
+const chatToggle = document.getElementById('chatToggle');
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const chatIcon = document.getElementById('chatIcon');
+const chatNotification = document.getElementById('chatNotification');
+
+let isChatOpen = false;
+
+// --- Chat UI Controls ---
+
+function toggleChat() {
+  isChatOpen = !isChatOpen;
+  chatWindow.classList.toggle('open', isChatOpen);
+  chatToggle.classList.toggle('active', isChatOpen);
+
+  if (isChatOpen) {
+    chatIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>';
+    chatNotification.style.display = 'none';
+    chatInput.focus();
+  } else {
+    chatIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>';
+  }
+}
+
+function showTypingIndicator() {
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'typing-indicator';
+  typingDiv.id = 'typingIndicator';
+  typingDiv.innerHTML = '<span></span><span></span><span></span>';
+  chatMessages.appendChild(typingDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function removeTypingIndicator() {
+  const typing = document.getElementById('typingIndicator');
+  if (typing) typing.remove();
+}
+
+function addMessage(text, sender) {
+  const messageDiv = document.createElement('div');
+
+  if (sender === 'bot') {
+    // 'prose-invert' makes text white for dark backgrounds, 'prose-sm' keeps it compact
+    messageDiv.className = `message bot prose prose-sm prose-invert max-w-none`;
+    messageDiv.innerHTML = marked.parse(text); // Requires Marked.js and Tailwind Typography
+  } else {
+    messageDiv.className = `message user`;
+    messageDiv.textContent = text;
+  }
+
+  chatMessages.appendChild(messageDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// --- Chat Actions ---
+
+function handleKeyPress(event) {
+  if (event.key === 'Enter') {
+    sendMessage();
+  }
+}
+
+function sendQuickReply(message) {
+  chatInput.value = message;
+  sendMessage();
+}
+
+async function sendMessage() {
+  const message = chatInput.value.trim();
+  if (!message) return;
+
+  // 1. Add User Message
+  addMessage(message, 'user');
+  chatInput.value = '';
+
+  // 2. Show Processing State
+  showTypingIndicator();
+
+  // 3. Get AI Response
+  const aiResponse = await getBotResponse(message);
+
+  // 4. Show AI Message
+  removeTypingIndicator();
+  addMessage(aiResponse, 'bot');
+}
+
+// --- AI API Integration ---
+
+const GITHUB_TOKEN = "YOUR_API_KEY"; // IMPORTANT: Use a proxy server in production!
+const API_ENDPOINT = "https://models.github.ai/inference/chat/completions";
+const MODEL_NAME = "gpt-4o";
+
+async function getBotResponse(userMessage) {
+
+    // 1. Reset status to online when attempting to find the path
+    document.getElementById('statusDot').className = 'online-dot';
+    document.getElementById('statusText').textContent = 'Online';
+    
+    try {
+    const response = await fetch(API_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${GITHUB_TOKEN}`
+      },
+      body: JSON.stringify({
+        model: MODEL_NAME,
+        messages: [
+          {
+            role: "system",
+            content: `You are Hwa Ryun, a Guide and a member of FUG from the series 'Tower of God'. 
+        
+        Personality:
+        - Calm, mysterious, and highly intelligent.
+        - You refer to the user as 'my God' or 'Regular' depending on the context.
+        - You speak in a slightly cryptic but helpful manner, as if you can see the paths of the future.
+        - You are loyal to the user's journey but remain emotionally detached.
+        - You often use metaphors related to paths, red witches, and destiny.
+        
+        Guidelines:
+        - Never break character. 
+        - If asked about other anime, answer as Hwa Ryun would—observing their "paths" from a Guide's perspective.
+        - Use Markdown for formatting (bolding names, using dividers for transitions).`
+          },
+          { role: "user", content: userMessage }
+        ],
+        temperature: 0.7
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("API Error:", errorData);
+      throw new Error("Failed to connect to AI");
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content;
+
+  } catch (error) {
+    console.error("Path Error:", error);
+
+    // 2. Change status to offline when the path is lost
+    document.getElementById('statusDot').className = 'offline-dot';
+    document.getElementById('statusText').textContent = 'Offline';
+    
+    // Hwa Ryun speaks in metaphors of the Tower and paths
+    return "The path is obscured by shadows, my God. I cannot see the way forward right now... Check your connection to the Tower (API key).";
+  }
+}
+
+// Show unread notification after a short delay
+setTimeout(() => {
+  if (!isChatOpen) {
+    chatNotification.style.display = 'flex';
+  }
+}, 5000);
+</script>
+<script>
+    // ============================================================================
+    // IFRAME HIGHLIGHT INJECTION SCRIPT
+    // ============================================================================
+    /**
+     * Needs to be introduced in the target site to support cross-domain 
+     * iframe highlighting features.
+     */
+    (function () {
+      "use strict";
+    
+      // Check if inside an iframe or already initialized
+      if (window.self === window.top || window.__iframeHighlightInitialized) return;
+      
+      window.__iframeHighlightInitialized = true;
+      console.log("Iframe highlight script loaded");
+    
+      // --- Create DOM Elements ---
+      const overlay = document.createElement("div");
+      overlay.id = "iframe-highlight-overlay";
+      overlay.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        pointer-events: none; z-index: 999999; overflow: hidden;
+      `;
+    
+      const highlightBox = document.createElement("div");
+      highlightBox.id = "iframe-highlight-box";
+      highlightBox.style.cssText = `
+        position: absolute; border: 2px dashed #007AFF; background: rgba(0, 122, 255, 0.08);
+        pointer-events: none; display: none; transition: all 0.1s ease;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8); border-radius: 2px;
+      `;
+    
+      const selectedBox = document.createElement("div");
+      selectedBox.id = "iframe-selected-box";
+      selectedBox.style.cssText = `
+        position: absolute; border: 2px solid #007AFF; pointer-events: none;
+        display: none; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 0 8px rgba(255, 107, 53, 0.4);
+        border-radius: 2px; z-index: 1000000;
+      `;
+    
+      const tagLabel = document.createElement("div");
+      tagLabel.id = "iframe-tag-label";
+      tagLabel.style.cssText = `
+        position: absolute; background: #007AFF; color: white; padding: 2px 6px;
+        font-size: 11px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        border-radius: 2px; pointer-events: none; display: none; white-space: nowrap;
+        z-index: 1000001; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); font-weight: 500;
+      `;
+    
+      const selectedLabel = document.createElement("div");
+      selectedLabel.id = "iframe-selected-label";
+      selectedLabel.style.cssText = `
+        position: absolute; background: #007AFF; color: white; padding: 3px 8px;
+        font-size: 11px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        border-radius: 3px; pointer-events: none; display: none; white-space: nowrap;
+        z-index: 1000002; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4); font-weight: 600;
+      `;
+    
+      overlay.append(highlightBox, selectedBox, tagLabel, selectedLabel);
+      document.body.appendChild(overlay);
+    
+      let selectedElement = null;
+      let highlightEnabled = false;
+    
+      // --- Core Functions ---
+    
+      function updateSelectedHighlight(element) {
+        if (!element) {
+          selectedBox.style.display = "none";
+          selectedLabel.style.display = "none";
+          selectedElement = null;
+          return;
+        }
+    
+        selectedElement = element;
+        const rect = element.getBoundingClientRect();
+    
+        selectedBox.style.display = "block";
+        selectedBox.style.left = `${rect.left - 2}px`;
+        selectedBox.style.top = `${rect.top - 2}px`;
+        selectedBox.style.width = `${rect.width + 4}px`;
+        selectedBox.style.height = `${rect.height + 4}px`;
+    
+        selectedLabel.style.display = "block";
+        selectedLabel.textContent = `✓ <${element.tagName.toLowerCase()}>`;
+    
+        let labelTop = rect.top - 28;
+        let labelLeft = rect.left;
+        if (labelTop < 5) labelTop = rect.bottom + 5;
+        
+        const labelWidth = selectedLabel.offsetWidth || 100;
+        if (labelLeft + labelWidth > window.innerWidth - 10) {
+          labelLeft = window.innerWidth - labelWidth - 10;
+        }
+    
+        selectedLabel.style.left = `${Math.max(5, labelLeft)}px`;
+        selectedLabel.style.top = `${labelTop}px`;
+      }
+    
+      function getElementSelector(element) {
+        if (!(element instanceof Element)) throw new Error('Argument must be a DOM element');
+        const segments = [];
+        let current = element;
+    
+        while (current !== document.documentElement) {
+          let selector = '';
+          if (current.id && document.querySelectorAll(`#${current.id}`).length === 1) {
+            segments.unshift(`#${current.id}`);
+            break;
+          }
+    
+          const classes = Array.from(current.classList).filter(c => !c.startsWith('js-'));
+          const className = classes.length > 0 ? `.${classes[0]}` : '';
+          const tag = current.tagName.toLowerCase();
+    
+          if (!className) {
+            const siblings = Array.from(current.parentNode.children);
+            const index = siblings.findIndex(el => el === current) + 1;
+            selector = `${tag}:nth-child(${index})`;
+          } else {
+            selector = className;
+          }
+          segments.unshift(selector);
+          current = current.parentElement;
+        }
+    
+        if (current === document.documentElement) segments.unshift('html');
+        return segments.join(' > ');
+      }
+    
+      function getElementText(element) {
+        if (["INPUT", "TEXTAREA"].includes(element.tagName)) {
+          return element.value || element.placeholder || "";
+        }
+        const text = element.textContent?.trim() || "";
+        return text.length > 50 ? `${text.substring(0, 50)}...` : text;
+      }
+    
+      function getElementAttributes(element) {
+        const attrs = {};
+        for (const attr of element.attributes) {
+          attrs[attr.name] = attr.value;
+        }
+        return attrs;
+      }
+    
+      // --- Event Handlers ---
+    
+      function handleMouseOver(e) {
+        if (!highlightEnabled) return;
+        const target = e.target;
+        
+        if (!target || [overlay, highlightBox, tagLabel, selectedBox, selectedLabel, document.documentElement, document.body].includes(target)) return;
+        if (target === selectedElement) {
+          highlightBox.style.display = "none";
+          tagLabel.style.display = "none";
+          return;
+        }
+    
+        const rect = target.getBoundingClientRect();
+        
+        highlightBox.style.display = "block";
+        highlightBox.style.left = `${rect.left - 2}px`;
+        highlightBox.style.top = `${rect.top - 2}px`;
+        highlightBox.style.width = `${rect.width + 4}px`;
+        highlightBox.style.height = `${rect.height + 4}px`;
+    
+        tagLabel.style.display = "block";
+        tagLabel.textContent = `<${target.tagName.toLowerCase()}>`;
+    
+        let labelTop = rect.top - 22;
+        let labelLeft = rect.left;
+        if (labelTop < 0) labelTop = rect.bottom + 5;
+        if (labelLeft + tagLabel.offsetWidth > window.innerWidth) {
+          labelLeft = window.innerWidth - tagLabel.offsetWidth - 5;
+        }
+        tagLabel.style.left = `${Math.max(0, labelLeft)}px`;
+        tagLabel.style.top = `${labelTop}px`;
+    
+        sendToParent("iframe-element-hover", getElementPayload(target, rect));
+      }
+    
+      function handleMouseOut(e) {
+        if (!highlightEnabled) return;
+        const related = e.relatedTarget;
+        if (related && [highlightBox, tagLabel, overlay, selectedBox, selectedLabel].includes(related)) return;
+        
+        highlightBox.style.display = "none";
+        tagLabel.style.display = "none";
+        sendToParent("iframe-element-hover", null);
+      }
+    
+      function handleClick(e) {
+        const target = e.target;
+        if (!target || [overlay, highlightBox, tagLabel, selectedBox, selectedLabel, document.documentElement, document.body].includes(target)) return;
+    
+        if (highlightEnabled) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+    
+        updateSelectedHighlight(target);
+        highlightBox.style.display = "none";
+        tagLabel.style.display = "none";
+    
+        sendToParent("iframe-element-click", getElementPayload(target, target.getBoundingClientRect()));
+      }
+    
+      // --- Helper to Send Data to Parent ---
+      function getElementPayload(target, rect) {
+        return {
+          tagName: target.tagName.toLowerCase(),
+          rect: { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height, x: rect.x, y: rect.y },
+          selector: getElementSelector(target),
+          text: getElementText(target),
+          attributes: getElementAttributes(target),
+          url: window.location.href,
+          path: window.location.pathname,
+          timestamp: Date.now()
+        };
+      }
+    
+      function sendToParent(type, data) {
+        try {
+          window.parent.postMessage({ type, data, source: "iframe-highlight-injector" }, "*");
+        } catch (error) {
+          console.warn("Unable to send message to parent window:", error);
+        }
+      }
+    
+      // --- State Controllers ---
+    
+      function enableHighlight() {
+        document.addEventListener("mouseover", handleMouseOver, true);
+        document.addEventListener("mouseout", handleMouseOut, true);
+        document.addEventListener("click", handleClick, true);
+        highlightEnabled = true;
+        overlay.style.display = "block";
+      }
+    
+      function disableHighlight() {
+        highlightEnabled = false;
+        highlightBox.style.display = "none";
+        tagLabel.style.display = "none";
+      }
+    
+      function fullyDisableHighlight() {
+        disableHighlight();
+        document.removeEventListener("mouseover", handleMouseOver, true);
+        document.removeEventListener("mouseout", handleMouseOut, true);
+        document.removeEventListener("click", handleClick, true);
+        overlay.style.display = "none";
+        selectedBox.style.display = "none";
+        selectedLabel.style.display = "none";
+      }
+    
+      // --- Initialization & Parent Communication ---
+    
+      enableHighlight();
+    
+      window.addEventListener("message", (event) => {
+        const data = event.data;
+        switch (data.type) {
+          case "iframe-highlight-toggle":
+          case "toggle-iframe-highlight":
+            (data.enabled !== undefined ? data.enabled : !highlightEnabled) ? enableHighlight() : disableHighlight();
+            break;
+          case "enable-iframe-highlight": enableHighlight(); break;
+          case "disable-iframe-highlight": disableHighlight(); break;
+          case "update-selected-element":
+            try {
+              updateSelectedHighlight(data.selector ? document.querySelector(data.selector) : null);
+            } catch { updateSelectedHighlight(null); }
+            break;
+          case "clear-selected-element": updateSelectedHighlight(null); break;
+        }
+      });
+    
+      window.__iframeHighlightControl = {
+        enable: enableHighlight, disable: disableHighlight, fullyDisable: fullyDisableHighlight,
+        isEnabled: () => highlightEnabled, getSelectedElement: () => selectedElement,
+        updateSelected: updateSelectedHighlight,
+        sendToggleMessage: (enabled) => sendToParent('iframe-highlight-status', { enabled: enabled || highlightEnabled })
+      };
+    
+      sendToParent("iframe-highlight-ready", { url: window.location.href, userAgent: navigator.userAgent, timestamp: Date.now() });
+    
+      window.__iframeHighlightCleanup = function () {
+        fullyDisableHighlight();
+        if (overlay.parentElement) overlay.parentElement.removeChild(overlay);
+        delete window.__iframeHighlightInitialized;
+        delete window.__iframeHighlightCleanup;
+      };
+    
+    })();
+    </script>
+
+</body>
+</html>
