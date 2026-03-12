@@ -1,5 +1,7 @@
 # 🌹 Hwa Ryun: The Red-Haired Guide
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A high-performance, visually striking landing page and **interactive AI experience** dedicated to **Hwa Ryun**, the enigmatic strategist from the *Tower of God* series. This project showcases a modern "Dark Crimson" UI/UX design, smooth animations, a responsive layout, and a fully integrated AI chatbot that roleplays as the Red Witch herself.
 
 ![Project Preview](ss.png)
